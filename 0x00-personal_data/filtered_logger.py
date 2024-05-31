@@ -86,3 +86,27 @@ def get_db() -> connection.MySQLConnection:
         )
     return db
 
+
+def main():
+    """
+    main code entry to handle database connection and message logging
+    using all the utils above
+    """
+    my_logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT name, email, phone, ssn, password," +
+                   " ip, last_login, user_agent FROM users;")
+    for (name, email, phone, ssn, password,
+         ip, last_login, user_agent) in cursor:
+        login_time = last_login.strftime("%Y-%m-%dT%H:%M:%S")
+        message = f"name={name}; email={email}; phone={phone}; ssn={ssn};"
+        message += f" password={password}; ip={ip};"
+        message += f" last_login={login_time}; user_agent={user_agent}"
+        my_logger.info(message)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
