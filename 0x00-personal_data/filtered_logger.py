@@ -4,7 +4,7 @@ aboduscatation funciton moduel
 """
 import logging
 import re
-from typing import Sequence, List
+from typing import List
 
 
 class RedactingFormatter(logging.Formatter):
@@ -15,7 +15,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: Sequence[str]):
+    def __init__(self, fields: List[str]):
         """
         initiate RedactingFormatter instance
         Parameters:
