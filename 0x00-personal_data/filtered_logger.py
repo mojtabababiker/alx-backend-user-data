@@ -3,8 +3,10 @@
 aboduscatation funciton moduel
 """
 import logging
+import os
 import re
 from typing import List
+import mysql.connector
 
 
 PII_FIELDS = ("email", "phone", "ssn", "name", "password")
@@ -64,3 +66,22 @@ def get_logger() -> logging.Logger:
     user_data.propagate = False
     user_data.addHandler(handler)
     return user_data
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    Connect to a database using enviornment variable and return
+    a connector object
+    """
+    user_name = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+
+    db = mysql.connector.connect(
+        user=user_name,
+        password=password,
+        host=host,
+        database=db_name
+        )
+    return db
