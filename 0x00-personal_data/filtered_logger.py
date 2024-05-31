@@ -4,7 +4,7 @@ aboduscatation funciton moduel
 """
 import logging
 import re
-from typing import Sequence
+from typing import Sequence, List
 
 
 class RedactingFormatter(logging.Formatter):
@@ -42,7 +42,7 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
-def filter_datum(fields: Sequence[str], redaction: str,
+def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """filter a log message by obfuscate the sensitive fields on it"""
     pattern = r"(?P<f>{})=.*?{}".format('|'.join(fields), separator)
