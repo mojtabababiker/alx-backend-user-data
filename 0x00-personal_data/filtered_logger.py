@@ -60,7 +60,7 @@ def filter_datum(fields: Sequence[str], redaction: str,
     ------------
     str: The obfuscated message
     """
-    for field in fields:
-        message = re.sub(r"{}=.*?{}".format(field, separator), string=message,
-                         repl=r"{}={}{}".format(field, redaction, separator))
-    return message
+    patterns = ""
+    pattern = r"(?P<f>{})=.*?{}".format('|'.join(fields), separator)
+    return re.sub(pattern, repl=r"\g<f>={}{}".format(redaction, separator),
+                  string=message)
