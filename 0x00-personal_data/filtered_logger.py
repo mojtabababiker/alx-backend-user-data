@@ -84,5 +84,5 @@ def get_db() -> connection.MySQLConnection:
         host=host,
         database=db_name
         )
-    print(db)
     return db
+
