@@ -44,23 +44,7 @@ class RedactingFormatter(logging.Formatter):
 
 def filter_datum(fields: Sequence[str], redaction: str,
                  message: str, separator: str) -> str:
-    """
-    filter a log message by obfuscate the sensitive fields on it
-    return the new obfuscated message
-
-    Parameters:
-    -----------
-    fields: a list of strings representing all fields to obfuscate
-    redaction: a string representing by what the field will be obfuscated
-    message: a string representing the log line
-    separator: a string representing by which character is separating all
-               fields in the log line (message)
-
-    Returns:
-    ------------
-    str: The obfuscated message
-    """
-    patterns = ""
+    """filter a log message by obfuscate the sensitive fields on it"""
     pattern = r"(?P<f>{})=.*?{}".format('|'.join(fields), separator)
     return re.sub(pattern, repl=r"\g<f>={}{}".format(redaction, separator),
                   string=message)
