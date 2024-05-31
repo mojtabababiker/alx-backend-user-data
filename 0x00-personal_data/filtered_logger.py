@@ -2,14 +2,14 @@
 """
 aboduscatation funciton moduel
 """
+import logging
 import re
 from typing import Sequence
-import logging
 
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        """
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -60,11 +60,7 @@ def filter_datum(fields: Sequence[str], redaction: str,
     ------------
     str: The obfuscated message
     """
-    obf_msg = message
-
     for field in fields:
-        pattern = r"{}=.*?{}".format(field, separator)
-        repl = r"{}={}{}".format(field, redaction, separator)
-        obf_msg = re.sub(pattern=pattern, repl=repl, string=obf_msg)
-
-    return obf_msg
+        message = re.sub(r"{}=.*?{}".format(field, separator), string=message,
+                         repl=r"{}={}{}".format(field, redaction, separator))
+    return message
