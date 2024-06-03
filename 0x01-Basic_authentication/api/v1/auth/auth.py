@@ -25,6 +25,8 @@ class Auth:
         for p in excluded_paths:
             if re.search(path, p):
                 return False
+            if p.endswith("*") and re.match(path, p):
+                return False
         return True
 
     def authorization_header(self, request: request = None) -> str:
