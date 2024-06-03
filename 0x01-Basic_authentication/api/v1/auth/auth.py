@@ -40,7 +40,7 @@ class Auth:
         auth_val: str, the value of the authorization header
         """
         if not request:
-            return None        
+            return None
         return request.headers.get('Authorization')
 
     def current_user(self, request: request = None) -> TypeVar('User'):
@@ -51,21 +51,3 @@ class Auth:
         request: flask.request object
         """
         return None
-
-
-if __name__ == "__main__":
-    a = Auth()
-
-    print(a.require_auth("/api/v1/status/", ["/api/v1/status/"]))
-    print(a.authorization_header())
-    print(a.current_user())
-
-    print("=" * 60)
-
-    print(a.require_auth(None, None))
-    print(a.require_auth(None, []))
-    print(a.require_auth("/api/v1/status/", []))
-    print(a.require_auth("/api/v1/status/", ["/api/v1/status/"]))
-    print(a.require_auth("/api/v1/status", ["/api/v1/status/"]))
-    print(a.require_auth("/api/v1/users", ["/api/v1/status/"]))
-    print(a.require_auth("/api/v1/users", ["/api/v1/status/", "/api/v1/stats"]))

@@ -43,6 +43,7 @@ def forbidden(error):
     """
     return jsonify({"error": "Forbidden"}), 403
 
+
 @app.before_request
 def before_request():
     """Handle some auth processing before each requst
