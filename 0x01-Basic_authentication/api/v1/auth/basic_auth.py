@@ -3,7 +3,6 @@
 Basic authorization sechema module holds teh BasicAuth
 """
 from base64 import b64decode
-from binascii import Error
 from api.v1.auth.auth import Auth
 
 
@@ -37,5 +36,5 @@ class BasicAuth(Auth):
         try:
             auth_str = b64decode(base64_authorization_header).decode("utf-8")
             return auth_str
-        except (Error, UnicodeDecodeError):
+        except Exception:
             return None
