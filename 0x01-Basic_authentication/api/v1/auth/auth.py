@@ -25,7 +25,7 @@ class Auth:
         for p in excluded_paths:
             if re.search(path, p):
                 return False
-            if p.endswith("*") and re.match(path, p):
+            if p.endswith("*") and re.search(p[:-1], path):
                 return False
         return True
 
