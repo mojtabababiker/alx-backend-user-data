@@ -79,3 +79,21 @@ class BasicAuth(Auth):
             return user
         except Exception:
             return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Get the current active user
+        Parameters:
+        ------------
+        request: flask.request object
+        """
+        encoded_auth = self.extract_base64_authorization_header(
+            self.authorization_header(request)
+        )
+        auth = self.decode_base64_authorization_header(encoded_auth)
+        if not auth:
+            return None
+        user_email, user_pwd = self.extract_user_credentials(auth)
+        if not user_email or not user_pwd:
+            return None
+        return self.user_object_from_credentials(user_email, user_pwd)
