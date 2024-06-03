@@ -57,3 +57,23 @@ class BasicAuth(Auth):
             return (credents[0], credents[1])
         except IndexError:
             return (None, None)
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str
+    ) -> TypeVar('User'):
+        """Returns a User instance based on the user_email and user_pwd, or
+        None if there is no user with these credentials
+        """
+        if not user_email or not isinstance(user_email, str):
+            return None
+        if not user_pwd or not isinstance(user_pwd, str):
+            return None
+        try:
+            user = User.search({"email": user_email})[0]
+            if not user:
+                return None
+            if not user.is_valid_password(user_pwd):
+                return None
+            return user
+        except IndexError:
+            return None
