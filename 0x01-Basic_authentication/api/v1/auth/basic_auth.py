@@ -3,6 +3,7 @@
 Basic authorization sechema module holds teh BasicAuth
 """
 from base64 import b64decode
+from binascii import Error
 from api.v1.auth.auth import Auth
 
 
