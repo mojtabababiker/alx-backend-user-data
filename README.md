@@ -7,7 +7,6 @@
 **How to log and obfuscate user data using python logger and regex**
 
 
+## 0x01. Basic authentication
 
-
-
-
+**What the authentication process means and implement a Basic Authentication on a simple API.**
