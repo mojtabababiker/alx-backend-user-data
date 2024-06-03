@@ -56,7 +56,7 @@ class BasicAuth(Auth):
             return (None, None)
         credents = decoded_base64_authorization_header.split(":")
         try:
-            return (credents[0], "".join(credents[1:]))
+            return (credents[0], ":".join(credents[1:]))
         except IndexError:
             return (None, None)
 
