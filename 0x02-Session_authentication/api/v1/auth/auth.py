@@ -2,6 +2,7 @@
 """
 Authorization handling module
 """
+import os
 import re
 from typing import TypeVar, List
 from flask import request
