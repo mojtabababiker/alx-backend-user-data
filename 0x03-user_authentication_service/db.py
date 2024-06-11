@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 """
 DB module
@@ -37,7 +38,9 @@ class DB:
         Create a new user with the email and password,
         return the new user object
         """
-        user = User(email, hashed_password)
+        user = User()
+        user.email = email
+        user.hashed_password = hashed_password
 
         self.__session.add(user)  # type: ignore
         self.__session.commit()  # type: ignore
