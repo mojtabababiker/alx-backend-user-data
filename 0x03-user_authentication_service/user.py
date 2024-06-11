@@ -2,6 +2,7 @@
 """
 User database model module
 """
+from typing import Union
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 
@@ -20,3 +21,14 @@ class User(Base):  # type: ignore
     hashed_password = Column(String(255), nullable=False)
     session_id = Column(String(255), nullable=True)
     reset_token = Column(String(255), nullable=True)
+
+    def __init__(self, email: str, hashed_password: str,
+                 session_id: Union[str, None] = None,
+                 reset_token: Union[str, None] = None):
+        """
+        construct User instance
+        """
+        self.email = email  # type: ignore
+        self.hashed_password = hashed_password  # type: ignore
+        self.session_id = session_id  # type: ignore
+        self.reset_token = reset_token  # type: ignore
