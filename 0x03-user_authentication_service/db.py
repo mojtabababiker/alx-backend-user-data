@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """
 DB module
@@ -42,7 +41,7 @@ class DB:
         user.email = email
         user.hashed_password = hashed_password
 
-        self.__session.add(user)  # type: ignore
-        self.__session.commit()  # type: ignore
+        self._session.add(user)  # type: ignore
+        self._session.commit()  # type: ignore
 
         return user
