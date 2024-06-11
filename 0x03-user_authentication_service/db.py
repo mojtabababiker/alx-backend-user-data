@@ -31,17 +31,14 @@ class DB:
             self.__session = DBSession()  # type: ignore
         return self.__session  # type: ignore
 
-    def add_user(self, email: str, hashed_password: str,
-                 **kwargs: dict) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """
         Create a new user with the email and password,
         return the new user object
         """
-        user = User()
-        user.email = email
-        user.hashed_password = hashed_password
+        user = User(email=email, hashed_password=hashed_password)
 
-        self._session.add(user)  # type: ignore
-        self._session.commit()  # type: ignore
+        self._session.add(user)
+        self._session.commit()
 
         return user
