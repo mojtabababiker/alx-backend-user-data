@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """Auth module that holds the authentication service
 """
+from uuid import uuid4
 from bcrypt import hashpw, gensalt
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
+
+
+def _generate_uuid() -> str:
+    """Generates a UUID
+    """
+    return str(uuid4())
 
 
 def _hash_password(password: str) -> bytes:
@@ -44,3 +51,15 @@ class Auth:
             return False
 
         return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
+
+    def create_session(self, email: str) -> str:
+        """Generates a session ID for the user with email email.
+        save it to the database and return the session ID.
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+        except NoResultFound:
+            return None
+        return session_id
