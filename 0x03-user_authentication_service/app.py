@@ -8,7 +8,7 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route('/', strict_slaches=False)
+@app.route('/', strict_slashes=False)
 def home() -> Response:
     """Home endpoint
     """
