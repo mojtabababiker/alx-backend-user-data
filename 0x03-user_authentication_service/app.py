@@ -55,7 +55,7 @@ def login() -> Response:
 
 
 @app.route('/sessions', methods=["DELETE"], strict_slashes=False)
-def logout():
+def logout() -> Response:
     """Logout endpoint that delete the session_id
     """
     session_id = request.cookies.get("session_id")
@@ -66,6 +66,15 @@ def logout():
     return redirect(url_for(home))
 
 
+@app.route('/profile', strict_slashes=False)
+def profile() -> Response:
+    """User profile endpoint
+    """
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+    return jsonify({"email": user.email})
 
 
 if __name__ == "__main__":
