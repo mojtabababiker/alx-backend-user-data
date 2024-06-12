@@ -45,7 +45,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: dict) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """Find and return the first user that match the parameters
         on the kwargs
         NoResultFound will be raised when the are no result with those
@@ -62,7 +62,7 @@ class DB:
             raise NoResultFound
         return user
 
-    def update_user(self, user_id: int, **kwargs: dict) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Update the user with id equal user_id by the kwargs
         """
         user = self.find_user_by(id=user_id)
