@@ -54,7 +54,7 @@ def login() -> Response:
     return response
 
 
-@app.route('/session', methods=["DELETE"], strict_slashes=False)
+@app.route('/sessions', methods=["DELETE"], strict_slashes=False)
 def logout():
     """Logout endpoint that delete the session_id
     """
