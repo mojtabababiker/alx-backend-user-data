@@ -3,9 +3,11 @@
 DB module that holds the database engine abstract class
 """
 from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -29,15 +31,15 @@ class DB:
         """
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
-            self.__session = DBSession()  # type: ignore
-        return self.__session  # type: ignore
+            self.__session = DBSession()
+        return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """
         Create a new user with the email and password,
         return the new user object
         """
-        user = User()  # type: ignore
+        user = User()
         user.email = email
         user.hashed_password = hashed_password
 
@@ -59,4 +61,3 @@ class DB:
         if user is None:
             raise NoResultFound()
         return user
-    
