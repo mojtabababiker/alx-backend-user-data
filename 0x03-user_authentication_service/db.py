@@ -54,11 +54,11 @@ class DB:
         InvalidRequestError will be raised when query (kwargs) contains
         wrong arguments
         """
-        try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-        except InvalidRequestError:
-            raise InvalidRequestError
+        for key in kwargs:
+            if not hasattr(User, key):
+                raise InvalidRequestError
 
+        user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
             raise NoResultFound
         return user
