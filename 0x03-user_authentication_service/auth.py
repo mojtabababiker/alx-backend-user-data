@@ -44,6 +44,7 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """Validate the login credentials
+        return True if the creadentials are valid, False otherwise.
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -55,6 +56,7 @@ class Auth:
     def create_session(self, email: str) -> str:
         """Generates a session ID for the user with email email.
         save it to the database and return the session ID.
+        return None if the email is not found.
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -63,3 +65,17 @@ class Auth:
         except NoResultFound:
             return None
         return session_id
+
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """
+        Retrive a user from the database based on the session_id
+        and return the user object, returns None if there no
+        user is found
+        """
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
+            return None
+        return user
