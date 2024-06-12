@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """DB module that holds the database engine abstract class
 """
-from typing import Any, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -46,7 +45,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict[str, Any]) -> User:
+    def find_user_by(self, **kwargs: dict) -> User:
         """Find and return the first user that match the parameters
         on the kwargs
         NoResultFound will be raised when the are no result with those
@@ -62,3 +61,14 @@ class DB:
         if user is None:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs: dict) -> None:
+        """Update the user with id equal user_id by the kwargs
+        """
+        user = self.find_user_by(id=user_id)
+        for key, val in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, val)
+        self._session.merge(user)
+        self._session.commit()
