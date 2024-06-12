@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+"""DB module that holds the database engine abstract class
 """
-DB module that holds the database engine abstract class
-"""
+from typing import Any, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -20,7 +20,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -35,8 +35,7 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """
-        Create a new user with the email and password,
+        """Create a new user with the email and password,
         return the new user object
         """
         user = User()
@@ -47,9 +46,8 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: dict) -> User:
-        """
-        Find and return the first user that match the parameters
+    def find_user_by(self, **kwargs: Dict[str, Any]) -> User:
+        """Find and return the first user that match the parameters
         on the kwargs
         NoResultFound will be raised when the are no result with those
         parameters
@@ -59,5 +57,5 @@ class DB:
         user = self._session.query(User).filter_by(**kwargs).first()
 
         if user is None:
-            raise NoResultFound()
+            raise NoResultFound
         return user
