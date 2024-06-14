@@ -10,20 +10,17 @@ from user import User
 
 
 def _generate_uuid() -> str:
-    """Generates a UUID
-    """
+    """Generates a UUID"""
     return str(uuid4())
 
 
 def _hash_password(password: str) -> bytes:
-    """Hashes a password using bcrypt and return the hashed password
-    """
-    return hashpw(password.encode('utf-8'), gensalt())
+    """Hashes a password using bcrypt and return the hashed password"""
+    return hashpw(password.encode("utf-8"), gensalt())
 
 
 class Auth:
-    """Auth class to interact with the authentication database.
-    """
+    """Auth class to interact with the authentication database."""
 
     def __init__(self):
         self._db = DB()
@@ -51,7 +48,7 @@ class Auth:
         except NoResultFound:
             return False
 
-        return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
+        return bcrypt.checkpw(password.encode("utf-8"), user.hashed_password)
 
     def create_session(self, email: str) -> str:
         """Generates a session ID for the user with email email.
@@ -88,3 +85,17 @@ class Auth:
             self._db.update_user(user_id=user_id, session_id=None)
         except NoResultFound:
             pass
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Generates a reset password token for the user with email email
+        and saves it in the database.
+        return the token.
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            raise ValueError
+
+        reset_token = _generate_uuid()
+        self._db.update_user(user.id, reset_token=reset_token)
+        return reset_token
