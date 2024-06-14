@@ -104,8 +104,8 @@ class Auth:
         """Rest user password if the reset_token is valid"""
         try:
             user = self._db.find_user_by(reset_token=reset_token)
-            self._db.update_user(
-                user.id, hashed_password=_hash_password(password), reset_token=None
-            )
         except NoResultFound:
             raise ValueError
+        self._db.update_user(
+            user.id, hashed_password=_hash_password(password), reset_token=None
+        )
