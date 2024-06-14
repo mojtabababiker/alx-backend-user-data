@@ -1,45 +1,35 @@
 #!/usr/bin/env python3
 """Basic flask app module
 """
-from flask import (
-    Flask,
-    Response,
-    abort,
-    request,
-    jsonify,
-    url_for,
-    redirect)
+from flask import Flask, Response, abort, request, jsonify, url_for, redirect
 from auth import Auth
 
 app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route('/', strict_slashes=False)
+@app.route("/", strict_slashes=False)
 def home() -> Response:
-    """Home endpoint
-    """
+    """Home endpoint"""
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route('/users', methods=["POST"], strict_slashes=False)
+@app.route("/users", methods=["POST"], strict_slashes=False)
 def users() -> Response:
-    """Users registration endpoint
-    """
+    """Users registration endpoint"""
     try:
         user = AUTH.register_user(
             request.form.get("email"), request.form.get("password")
-            )
+        )
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
     return jsonify({"email": user.email, "message": "user created"})
 
 
-@app.route('/sessions', methods=["POST"], strict_slashes=False)
+@app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> Response:
-    """Login endpoint based on the form creadentials
-    """
+    """Login endpoint based on the form creadentials"""
     email = request.form.get("email")
     password = request.form.get("password")
     if not email or not password:
@@ -54,27 +44,38 @@ def login() -> Response:
     return response
 
 
-@app.route('/sessions', methods=["DELETE"], strict_slashes=False)
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout() -> Response:
-    """Logout endpoint that delete the session_id
-    """
+    """Logout endpoint that delete the session_id"""
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
     AUTH.destroy_session(user.id)
-    return redirect(url_for(home))
+    return redirect("/")
 
 
-@app.route('/profile', strict_slashes=False)
+@app.route("/profile", strict_slashes=False)
 def profile() -> Response:
-    """User profile endpoint
-    """
+    """User profile endpoint"""
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
     return jsonify({"email": user.email})
+
+
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def reset_password() -> Response:
+    """Reset password endpoint"""
+    email = request.form.get("email")
+    if email is None:
+        abort(403)
+    try:
+        token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        abort(403)
+    return jsonify({"email": email, "reset_token": token})
 
 
 if __name__ == "__main__":
